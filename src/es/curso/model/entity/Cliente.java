@@ -1,14 +1,14 @@
 package es.curso.model.entity;
 
-public class cliente {
+public class Cliente {
 	private int id;
 	private String nombres;
 	private String apellidos;
 	private String dni;
-	private cliente() {
+	private Cliente() {
 		super();
 	}
-	private cliente(int id, String nombres, String apellidos, String dni) {
+	private Cliente(int id, String nombres, String apellidos, String dni) {
 		super();
 		this.id = id;
 		this.nombres = nombres;
@@ -63,7 +63,7 @@ public class cliente {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		cliente other = (cliente) obj;
+		Cliente other = (Cliente) obj;
 		if (apellidos == null) {
 			if (other.apellidos != null)
 				return false;
