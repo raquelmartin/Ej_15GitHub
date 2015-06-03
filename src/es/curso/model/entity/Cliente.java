@@ -5,10 +5,10 @@ public class Cliente {
 	private String nombres;
 	private String apellidos;
 	private String dni;
-	private Cliente() {
+	public Cliente() {
 		super();
 	}
-	private Cliente(int id, String nombres, String apellidos, String dni) {
+	public Cliente(int id, String nombres, String apellidos, String dni) {
 		super();
 		this.id = id;
 		this.nombres = nombres;
