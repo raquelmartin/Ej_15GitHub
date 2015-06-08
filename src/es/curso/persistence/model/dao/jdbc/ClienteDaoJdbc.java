@@ -113,4 +113,72 @@ public class ClienteDaoJdbc implements ClienteDao {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public ArrayList<Cliente> searchByName(String name) {
+		ArrayList<Cliente> clientes= new ArrayList<Cliente>();
+		try {
+			//1.Establecer la conexión con la bbdd
+			abrirConexion();
+			//2.Preparar la sentencia sql...parametrizada(las que tienen interrogante)
+			PreparedStatement ps = cx.prepareStatement("SELECT * FROM CLIENTE WHERE NOMBRES LIKE ?");
+			//2.1 Especificar lo que va en interrogación
+			ps.setString(1, "%"+name+"%");
+			//3.Ejecutar la query
+			ResultSet resultado = ps.executeQuery();
+			//3.1 Pasar los datos que vienen de la bbdd(ResultSet)hacia
+			//el ArrayList<cliente>
+			while(resultado.next()){
+				Cliente c= new Cliente();
+				c.setId(resultado.getInt("id"));
+				c.setNombres(resultado.getString("nombres"));
+				c.setApellidos(resultado.getString("apellidos"));
+				c.setDni(resultado.getNString("dni"));
+			clientes.add(c);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			//4. Cerrar la conexión(en el finally)
+			cerrarConexion();
+			
+		}
+		return null;
+	}
+
+	@Override
+	public void update(Cliente cliente) {
+		
+		
+	}
+
+	@Override
+	public void delete(Integer id) {
+		try {
+			//1. Establecer conexión
+			abrirConexion();
+			//2. Preparar las sentencias
+			PreparedStatement ps= cx.prepareStatement("DELETE FROM CLIENTE WHERE ID =?");
+			//2.1 Especificar lo que va en ?
+			ps.setInt(1, id);
+			//3. Ejecutar la sentencia
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			//4.Cerrar la conexión
+			cerrarConexion();
+		}
+		
+		
+	}
+
+	@Override
+	public void searchById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import es.curso.controllers.EliminarController;
+import es.curso.controllers.ejb.BuscarPorNombreControllerEjb;
 import es.curso.controllers.ejb.DarAltaClienteControllerEjb;
+import es.curso.controllers.ejb.EliminarControllerEjb;
 import es.curso.controllers.ejb.ListarTodosControllerEjb;
 import es.curso.model.entity.Cliente;
 
@@ -46,6 +49,11 @@ public class TiendaServlet extends HttpServlet {
 		String titulo = "Sin título";
 		RequestDispatcher rd;
 		switch(action){
+		    case "altaCliente": // se debe redirigir hacia el formulario altaCliente
+	    	 
+            rd= request.getRequestDispatcher("/archivosHtml/altaClienteView.html");
+            rd.forward(request, response);  
+            				break;
 			case "listarTodos"://se invocará al controlador adecuado
 							  //que obtendrá todos los clientes
 							   //esta petición redirige a otra página
@@ -67,6 +75,9 @@ public class TiendaServlet extends HttpServlet {
 				              rd =request.getRequestDispatcher("/jsp/listarTodos.jsp");
 				              rd.forward(request, response);
 							  break; 
+			case"eliminarPorId": rd=request.getRequestDispatcher("/jsp/eliminarPorId.jsp");
+			rd.forward(request, response);
+			                  break;
 		}
 		
 		
@@ -90,9 +101,36 @@ public class TiendaServlet extends HttpServlet {
 			            DarAltaClienteControllerEjb controlador= new DarAltaClienteControllerEjb();
 			            
 			            controlador.agregar(cliente);
-			            rd = request.getRequestDispatcher("/index.html");
+			            rd = request.getRequestDispatcher("/jsp/listarTodos.jsp");
 			            rd.forward(request, response);
 					break;
+		case "buscar por nombre": //recuperar la cadena tecleada en el formulario
+					String cadenaNombre = request.getParameter("nombre");
+					BuscarPorNombreControllerEjb controladorBusqueda = new BuscarPorNombreControllerEjb();
+					ArrayList<Cliente> resultado =controladorBusqueda.buscarPorNombre(cadenaNombre);
+					request.setAttribute("clientes", resultado);
+					request.setAttribute("titulo", "Búsqueda por " + cadenaNombre);
+					rd=request.getRequestDispatcher("/jsp/listarTodos.jsp");
+					rd.forward(request, response);
+					
+					
+		case"eliminarPorId":
+			         //recuperar el id tecleado en el form
+					int id= Integer.parseInt(request.getParameter("id"));
+					//llamar al controlador
+					EliminarController eliminarEjb = new EliminarControllerEjb();
+					eliminarEjb.eliminar(id);
+					response.sendRedirect("listarTodos");
+			        break;
+		//case"buscar por Id":
+			       //  int id = request. getParameter("id");
+			         //BuscarPorIdControllerEjb controladorBusqueda= new BuscarPorIdControllerEjb();
+			        //ArrayList<Cliente> resultado=controladorBusqueda.buscarPorId(cadenaNombre);
+			         //request.setAttribute("clientes", resultado);
+			         //request.setAttribute("titulo", "Búsqueda por" + cadenaNombre);
+			         //rd=request.getRequestDispatcher("listarTodos");
+			         //rd.forward(request,response);//
+			
 		}
 	}
 

@@ -10,4 +10,12 @@ public interface ClienteDao {
 	
 	public ArrayList<Cliente> findAll();
 	
+	public ArrayList<Cliente> searchByName(String name);
+	
+	public void update(Cliente cliente);
+	
+	public void delete(Integer id);
+	
+	public void searchById(Integer id);
+	
 }
